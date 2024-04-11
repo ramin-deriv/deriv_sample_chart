@@ -1,0 +1,21 @@
+name: deriv_sample_chart
+description: A Flutter chart package to visualize financial live data, plus some technical indicators.
+version: 0.0.5
+homepage: https://github.com/ramin-vakili/flutter-financial-chart
+
+environment:
+  sdk: '>=2.17.0 <3.0.0'
+  flutter: "2.0.0"
+
+
+dependencies:
+  flutter:
+    sdk: flutter
+  intl_utils: ^2.0.0
+
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+flutter:

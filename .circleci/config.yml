@@ -1,0 +1,82 @@
+version: 2.1
+
+executors:
+  flutter_executor:
+    docker:
+      - image: cirrusci/flutter:2.2.3
+
+commands:
+  prepare_environment:
+    description: Prepare environment for building the application
+    steps:
+      - checkout
+      - run:
+          name: Run Flutter doctor
+          command: flutter doctor
+      - restore_cache:
+          keys:
+            - android-sdk-licenses
+            - gradle
+            - pub-cache
+      - run:
+          name: pub get
+          command: flutter pub get
+
+  perform_tests:
+    description: Run tests and flutter analysis while also uploading code coverage reports
+    steps:
+      - run:
+          name: Run the application tests
+          command: flutter test -j 4 --coverage
+      - run:
+          name: Code analysis
+          command: |
+            flutter analyze --no-pub
+
+  save_artifacts:
+    description: Store built apk into artifacts
+    parameters:
+      build_type:
+        type: string
+        default: "dev-debug"
+    steps:
+      - run:
+          name: Copy APK
+          command: |
+            export BUILD_PATH=build/app/outputs/flutter-apk/app-<< parameters.build_type >>.apk
+            export DESTINATION_PATH=/artifacts/deriv-$CIRCLE_BUILD_NUM.apk
+            if [ << parameters.build_type >> = "prod-release-aab" ]; then
+              export BUILD_PATH=build/app/outputs/bundle/prodRelease/app-prod-release.aab
+              export DESTINATION_PATH=/artifacts/deriv-$CIRCLE_BUILD_NUM.aab
+            fi
+            sudo mkdir -p /artifacts && sudo chown "$(whoami)" /artifacts && cp $BUILD_PATH $DESTINATION_PATH
+      - store_artifacts:
+          path: /artifacts
+
+  build_app:
+    description: Perform building of app
+    steps:
+      - run:
+          name: Check that we can build for all Android platforms
+          command: |
+            cd example/
+            flutter build apk --debug
+
+jobs:
+  build_pr_debug:
+    executor: flutter_executor
+    steps:
+      - prepare_environment
+      - perform_tests
+      - build_app
+      - save_artifacts:
+          build_type: "dev-debug"
+
+workflows:
+  version: 2.1
+  build-workflow:
+    jobs:
+      - build_pr_debug:
+          filters:
+            branches:
+              ignore: dev
