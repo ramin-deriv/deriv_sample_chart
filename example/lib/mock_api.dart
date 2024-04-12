@@ -14,6 +14,7 @@ class MockAPI {
     this.onOHLCHistory,
     required this.granularity,
     int historyForPastSeconds = 1000,
+    final Duration generateInterval = const Duration(milliseconds: 500),
   }) {
     _intervalStartTime = DateTime.now()
         .toUtc()
@@ -39,7 +40,7 @@ class MockAPI {
     }
 
     _timer = Timer.periodic(
-      const Duration(seconds: 1),
+      generateInterval,
       (_) => _generateOHLC(DateTime.now().toUtc(), onNewCandle),
     );
   }

@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/physics.dart';
@@ -31,8 +32,8 @@ class _ChartWidgetState extends State<ChartWidget>
   late int _rightBoundTime;
 
   Size? _chartSize;
-  double _msPerPx = 1000;
-  double _prevMsPerPx = 1000;
+  double _msPerPx = 500;
+  double _prevMsPerPx = 500;
 
   double _timeToX(int time) {
     final leftBoundTime = _rightBoundTime - _chartSize!.width * _msPerPx;
@@ -143,15 +144,17 @@ class _ChartWidgetState extends State<ChartWidget>
                 final maxTime = widget.mainComponent.getMaxTime() ??
                     DateTime.now().millisecondsSinceEpoch;
 
+                final double velocity =
+                    -details.velocity.pixelsPerSecond.dx * _msPerPx;
+                final double maxRightTime =
+                    xToTime(_timeToX(maxTime) + 100).toDouble();
+
                 final scrollSimulation = BoundedFrictionSimulation(
                   0.05,
-                  // <- the bigger this value, the less friction is applied
-                  _rightBoundController.value,
-                  -details.velocity.pixelsPerSecond.dx *
-                      _msPerPx // <- Velocity of inertia
-                  ,
+                  _rightBoundController.value.clamp(0, maxRightTime),
+                  velocity,
                   0,
-                  xToTime(_timeToX(maxTime) + 100).toDouble(),
+                  maxRightTime,
                 );
                 _rightBoundController.animateWith(scrollSimulation);
               },
