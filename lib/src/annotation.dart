@@ -1,7 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_financial_chart/src/models.dart';
+import 'package:deriv_sample_chart/src/models.dart';
 
 import 'components.dart';
 

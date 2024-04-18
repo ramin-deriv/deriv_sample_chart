@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 
-import 'package:flutter_financial_chart/deriv_sample_chart.dart';
+import 'package:deriv_sample_chart/deriv_sample_chart.dart';
 
 typedef OnNewCandle = void Function(OHLC);
 typedef OnOHLCHistory = void Function(List<OHLC>);

@@ -3,9 +3,9 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/physics.dart';
-import 'package:flutter_financial_chart/src/components.dart';
+import 'package:deriv_sample_chart/src/components.dart';
 import 'package:collection/collection.dart' show IterableExtension;
-import 'package:flutter_financial_chart/src/helpers.dart';
+import 'package:deriv_sample_chart/src/helpers.dart';
 import 'models.dart';
 
 class ChartWidget extends StatefulWidget {

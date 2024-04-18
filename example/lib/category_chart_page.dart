@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_financial_chart/deriv_sample_chart.dart';
+import 'package:deriv_sample_chart/deriv_sample_chart.dart';
 
 import 'mock_api.dart';
 
